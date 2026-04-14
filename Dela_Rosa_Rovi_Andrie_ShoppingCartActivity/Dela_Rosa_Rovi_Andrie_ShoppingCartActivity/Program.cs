@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dela_Rosa_Rovi_Andrie_ShoppingCartActivity;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShoppingCartActivity
 {
@@ -6,9 +8,7 @@ namespace ShoppingCartActivity
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("--- SHOPPING CART SYSTEM ---");
-
-            Console.ReadKey();
+            Console.WriteLine("--- Shopping Cart System ---");
         }
     }
 }
