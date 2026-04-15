@@ -4,10 +4,13 @@ A console-based Shopping Cart System in C# using classes, objects, and an array 
 // AI Usage in This Project
 
 // Which Part I used AI for
-    // To understand the instructions indepthly, specially the AI Usage and Verbose Flowchart.
+    // In understanding instructions in-depthly, Especially the AI Usage and Verbose Flowchart.
+    // Input Validation using .TryParse.
 
 // Why I used AI
     // (Prompt) "i mean, don't tell me what to code, i just want you to explain it to me. 'cause i slightly don't get the instructions "AI usage explaination" and "Verbose Flowchart"
+    // (Prompt) "can you explain me how to use this .TryParse on simple code or logic?"
 
 // Improvements
-    // “I clarified the project requirements and avoided misunderstanding the instructions.”
+    // The requirements are clear to me and misunderstandings have been avoided.
+    // Improve by using int.TryParse instead of just int.Parse.
