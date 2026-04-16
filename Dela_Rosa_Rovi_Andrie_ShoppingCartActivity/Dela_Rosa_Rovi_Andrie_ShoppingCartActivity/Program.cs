@@ -9,8 +9,9 @@ namespace ShoppingCartActivity
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("----------------------------");
             Console.WriteLine("--- SHOPPING CART SYSTEM ---");
-
+            Console.WriteLine("----------------------------");
 
             Product[] bmenu = new Product[]
             {
@@ -25,15 +26,13 @@ namespace ShoppingCartActivity
                                                                            
             int bagCount = 0;
 
-            var choice = "YES";
+            var choice = "Y";
 
-            while (choice == "YES")
+            while (choice == "Y")
             {
 
-                Console.WriteLine("----------------------------");
-
-                Console.WriteLine("--- STORE MENU ---");
-                Console.WriteLine("\nID | NAME | PRICE | STOCK");
+                Console.WriteLine("\n--- STORE MENU ---");
+                Console.WriteLine("\nID|   NAME   |   PRICE   |   STOCK");
 
                 foreach (Product bclothes in bmenu)
                 {
@@ -71,19 +70,25 @@ namespace ShoppingCartActivity
                     continue;
                 }
 
-                bag[bagCount] = new Product { Id = picked.Id, Name = picked.Name, Price = picked.Price, RemainingStock = quanti };
+                bag[bagCount] = new Product 
+                {   
+                    Id = picked.Id, 
+                    Name = picked.Name, 
+                    Price = picked.Price, 
+                    RemainingStock = quanti 
+                };
 
                 picked.RemainingStock -= quanti;
                 bagCount++;
                 Console.WriteLine("The item was added to bag!");
 
-                Console.WriteLine("Do you want to purchase more item? (YES/NO)");
+                Console.WriteLine("\nDo you want to purchase more item? (Y - Yes/N - No)");
                 choice = Console.ReadLine().ToUpper();
 
                 
             }
 
-            Console.WriteLine("--- FINAL RECEIPT ---");
+            Console.WriteLine("\n--- FINAL RECEIPT ---");
             double Total = 0;
 
             for (int i = 0; i < bagCount; i++)
@@ -104,6 +109,11 @@ namespace ShoppingCartActivity
             else
             {
                 Console.WriteLine($"TOTAL TO PAY: P{Total}");
+            }
+            Console.WriteLine("\n--- UPDATED STOCK ---");
+            foreach (var p in bmenu) 
+            { 
+                Console.WriteLine ($"{p.Name}: {p.RemainingStock} left"); 
             }
 
             Console.WriteLine("\nThank you for copping goods! (PRESS ANY KEY TO EXIT)");
