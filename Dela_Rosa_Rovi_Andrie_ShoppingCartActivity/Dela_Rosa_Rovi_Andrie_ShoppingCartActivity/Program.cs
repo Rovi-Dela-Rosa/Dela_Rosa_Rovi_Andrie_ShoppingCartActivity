@@ -22,16 +22,14 @@ namespace ShoppingCartActivity
                 new Product {Id = 5, Name = "Nike Tank Top", Price = 199.00, RemainingStock = 9}
             };
 
-            Product[] bag = new Product[5];                              
-                                                                           
-            int bagCount = 0;
+            Cart bag = new Cart();
 
             var choice = "Y";
 
             while (choice == "Y")
             {
 
-                Console.WriteLine("\n--- STORE MENU ---");
+                Console.WriteLine("\n--- STORE MENU ---\n");
                 Console.WriteLine("\nID|   NAME   |   PRICE   |   STOCK");
 
                 foreach (Product bclothes in bmenu)
@@ -69,47 +67,28 @@ namespace ShoppingCartActivity
                     Console.WriteLine("Not enough stock for your purchase. Only " + picked.RemainingStock + " left in stock.");
                     continue;
                 }
+                if (!bag.AddToCart(picked, quanti))
+                {
+                    Console.WriteLine("Cart is full.");  // cart-full validation.
+                    continue;
+                }
 
-                bag[bagCount] = new Product 
-                {   
-                    Id = picked.Id, 
-                    Name = picked.Name, 
-                    Price = picked.Price, 
-                    RemainingStock = quanti 
-                };
+                do
+                {
+                    Console.Write("Do you want to purchase more item? (Y/N): ");
+                    choice = Console.ReadLine().ToUpper();
 
-                picked.RemainingStock -= quanti;
-                bagCount++;
-                Console.WriteLine("The item was added to bag!");
+                    if (choice != "Y" && choice != "N")
+                    {
+                        Console.WriteLine("Invalid input! Enter Y (for continue) or N (for stop shopping) only."); // applied a much strict and clearer validations for while loop to avoid typing any letters other than "Y" and "N".
+                    }
 
-                Console.WriteLine("\nDo you want to purchase more item? (Y - Yes/N - No)");
-                choice = Console.ReadLine().ToUpper();
-
+                } while (choice != "Y" && choice != "N");
                 
             }
 
-            Console.WriteLine("\n--- FINAL RECEIPT ---");
-            double Total = 0;
+            bag.DisplayReceipt();
 
-            for (int i = 0; i < bagCount; i++)
-            {
-                double lineTotal = bag[i].Price * bag[i].RemainingStock;
-                Console.WriteLine($"{bag[i].Name} x{bag[i].RemainingStock} - P{lineTotal}");
-                Total += lineTotal;
-            }
-
-            Console.WriteLine($"Grand Total: P{Total}");
-
-            if (Total >= 5000)
-            {
-                double items_discount = Total * 0.10;
-                Console.WriteLine($"Discount (10%): -P{items_discount}");
-                Console.WriteLine($"TOTAL TO PAY: P{(Total - items_discount)}");
-            }
-            else
-            {
-                Console.WriteLine($"TOTAL TO PAY: P{Total}");
-            }
             Console.WriteLine("\n--- UPDATED STOCK ---");
             foreach (var p in bmenu) 
             { 
