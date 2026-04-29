@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 {
-    public class Cart // i made a new class for cart to avoid main class to get bombarded by codes.
+    public class Cart 
     {
-        private Product[] bag = new Product[1]; // cart array of product objects. 
+        private Product[] bag = new Product[1];  
         private int bagCount = 0;
 
         public bool AddToCart(Product picked, int quantity)
@@ -23,7 +24,7 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
                 }
             }
 
-            if (bagCount >= bag.Length) // updated the fixed-size bag / cart and applied the validations in main class.
+            if (bagCount >= bag.Length) 
             {
                 return false;
             }
@@ -71,6 +72,72 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
             {
                 Console.WriteLine($"TOTAL TO PAY: P{Total}");
             }
+
+        }
+
+        public void ViewCart()
+        {
+            Console.WriteLine("\n--- YOUR CART ---");
+
+            if (bagCount == 0)
+            {
+                Console.WriteLine("Your bag is empty."); 
+                return;
+            }
+            
+            for (int i = 0; i < bagCount; i++)
+            {
+                double stotal = bag[i].GetItemTotal(bag[i].QuantityBought);
+
+                Console.WriteLine($"{bag[i].Id}. {bag[i].Name} x{bag[i].QuantityBought} - P{stotal}");
+            }
+        
+        }
+        public bool RemoveItem (int id)
+        {
+            for(int i = 0; i < bagCount; i++)
+            {
+                if (bag[i].Id == id)
+                {
+                    for (int j = i; j < bagCount; j++)
+                    {
+                        bag[j] = bag[j + 1];
+                    }
+
+                    bag[bagCount - 1] = null;
+                    bagCount--;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void ClearBag()
+        {
+            for (int i = 0; i < bagCount; i++)
+            {
+                bag[i] = null;
+            }
+
+            bagCount = 0;
+
+            Console.WriteLine("Your cart was cleared.");
+        }
+
+        public bool UpdateQuantt(int id, int newQuantt)
+        {
+            for (int i = 0; i < bagCount; i++)
+            {
+                if (bag[i].Id == id)
+                {
+                    bag[i].QuantityBought = newQuantt;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

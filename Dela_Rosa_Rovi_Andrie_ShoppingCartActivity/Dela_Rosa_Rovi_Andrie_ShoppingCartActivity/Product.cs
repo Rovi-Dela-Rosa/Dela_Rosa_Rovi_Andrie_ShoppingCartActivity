@@ -31,8 +31,6 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
         {
             RemainingStock -= quantity;
 
-
-            // applied the 2 required methods in product class addressing the lacking of requirements through comments in docs sheets. 
         }
     }
 }

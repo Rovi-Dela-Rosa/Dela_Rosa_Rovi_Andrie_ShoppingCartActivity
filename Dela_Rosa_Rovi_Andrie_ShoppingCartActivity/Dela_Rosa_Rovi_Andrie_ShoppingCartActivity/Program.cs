@@ -21,15 +21,15 @@ namespace ShoppingCartActivity
                 new Product {Id = 4, Name = "Adidas Crew Socks", Price = 299.00, RemainingStock = 30},
                 new Product {Id = 5, Name = "Nike Tank Top", Price = 199.00, RemainingStock = 9}
             };
-
+            
             Cart bag = new Cart();
 
             var choice = "Y";
 
             while (choice == "Y")
-            {
+            {Console.WriteLine("");
 
-                Console.WriteLine("\n--- STORE MENU ---\n");
+                Console.WriteLine("\n--- STORE PRODUCTS ---\n");
                 Console.WriteLine("\nID|   NAME   |   PRICE   |   STOCK");
 
                 foreach (Product bclothes in bmenu)
@@ -69,7 +69,7 @@ namespace ShoppingCartActivity
                 }
                 if (!bag.AddToCart(picked, quanti))
                 {
-                    Console.WriteLine("Cart is full.");  // cart-full validation.
+                    Console.WriteLine("Cart is full.");  
                     continue;
                 }
 
@@ -80,7 +80,7 @@ namespace ShoppingCartActivity
 
                     if (choice != "Y" && choice != "N")
                     {
-                        Console.WriteLine("Invalid input! Enter Y (for continue) or N (for stop shopping) only."); // applied a much strict and clearer validations for while loop to avoid typing any letters other than "Y" and "N".
+                        Console.WriteLine("Invalid input! Enter Y (for continue) or N (for stop shopping) only."); 
                     }
 
                 } while (choice != "Y" && choice != "N");
