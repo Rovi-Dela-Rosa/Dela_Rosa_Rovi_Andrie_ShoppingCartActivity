@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 {
@@ -8,20 +6,24 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Category { get; set; }
         public double Price { get; set; }
         public int RemainingStock { get; set; }
 
-        public int QuantityBought;
+        // For cart
+        public int QuantityBought { get; set; }
+        public Product OriginalProduct { get; set; }
 
         public void DisplayProduct()
         {
-            Console.WriteLine($"{Id}. {Name} - P{Price} (Stock: {RemainingStock})");
+            Console.WriteLine($"{Id}. {Name} ({Category}) - P{Price} (Stock: {RemainingStock})");
         }
 
         public bool HasEnoughStock(int quantity)
         {
             return RemainingStock >= quantity;
         }
+
         public double GetItemTotal(int quantity)
         {
             return Price * quantity;
@@ -30,7 +32,11 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
         public void DeductStock(int quantity)
         {
             RemainingStock -= quantity;
+        }
 
+        public void AddStock(int quantity)
+        {
+            RemainingStock += quantity;
         }
     }
 }
