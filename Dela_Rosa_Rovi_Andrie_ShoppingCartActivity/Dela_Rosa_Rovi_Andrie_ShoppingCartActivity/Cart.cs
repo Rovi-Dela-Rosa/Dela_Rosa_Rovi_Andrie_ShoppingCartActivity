@@ -18,6 +18,7 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 
                     bag[i].QuantityBought += quantity;
                     picked.DeductStock(quantity);
+
                     Console.WriteLine("Your cart was updated!");
                     return true;
                 }
@@ -45,7 +46,7 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 
         public void ViewCart()
         {
-            Console.WriteLine("\n--- YOUR CART ---");
+            Console.WriteLine("\n>>> YOUR CART <<<");
 
             if (bagCount == 0)
             {
@@ -82,6 +83,9 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 
         public bool UpdateQuantity(int id, int newQty)
         {
+            if (newQty <= 0)
+                return false;
+
             for (int i = 0; i < bagCount; i++)
             {
                 if (bag[i].Id == id)
@@ -111,8 +115,14 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
             return false;
         }
 
-        public void ClearCart()
+        public void ClearBag()
         {
+            if (bagCount == 0)
+            {
+                Console.WriteLine("The bag is already empty.");
+                return;
+            }
+
             for (int i = 0; i < bagCount; i++)
             {
                 bag[i].OriginalProduct.AddStock(bag[i].QuantityBought);
@@ -123,37 +133,66 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
             Console.WriteLine("Your cart was cleared.");
         }
 
-        public void DisplayReceipt()
+        public void LowkeyClearBag()
         {
-            Console.WriteLine("\n--- FINAL RECEIPT ---");
-
-            if (bagCount == 0)
+            for (int i = 0; i < bagCount; i++)
             {
-                Console.WriteLine("The cart is empty.");
-                return;
+                bag[i] = null;
             }
 
+            bagCount = 0;
+
+        }
+
+        public bool ItsEmpty()
+        {
+            return bagCount == 0;
+        }
+
+        public double TakeGrandTotal()
+        {
             double total = 0;
 
             for (int i = 0; i < bagCount; i++)
             {
-                double lineTotal = bag[i].GetItemTotal(bag[i].QuantityBought);
-                Console.WriteLine($"{bag[i].Name} x{bag[i].QuantityBought} - P{lineTotal}");
-                total += lineTotal;
+                total += bag[i].GetItemTotal(bag[i].QuantityBought);
             }
 
-            Console.WriteLine($"Grand Total: P{total}");
+            return total;
+        }
+
+        public double TakeDiscount()
+        {
+            double total = TakeGrandTotal();
 
             if (total >= 5000)
+                return total * 0.10;
+
+            return 0;
+        }
+
+        public void DisplayReceipt(string receiptNo, string dateNow, double PAYMENT, double CHANGE)
+        {
+            Console.WriteLine("\n>>> FINAL RECEIPT <<<");
+            Console.WriteLine("Receipt No: " + receiptNo);
+            Console.WriteLine("Date: " + dateNow);
+
+            double GRANDTOTAL = TakeGrandTotal();
+            double DISCOUNT = TakeDiscount();
+            double TOTALALIZATION = GRANDTOTAL - DISCOUNT;
+
+            for (int i = 0; i < bagCount; i++)
             {
-                double discount = total * 0.10;
-                Console.WriteLine($"Discount (10%): -P{discount}");
-                Console.WriteLine($"TOTAL TO PAY: P{total - discount}");
+                double Ltotal = bag[i].GetItemTotal(bag[i].QuantityBought);
+                Console.WriteLine($"{bag[i].Name} x {bag[i].QuantityBought} - P{Ltotal}");
             }
-            else
-            {
-                Console.WriteLine($"TOTAL TO PAY: P{total}");
-            }
+
+            Console.WriteLine($"Grand Total: P{GRANDTOTAL}");
+            Console.WriteLine($"Discount: P{DISCOUNT}");
+            Console.WriteLine($"Final Total: P{TOTALALIZATION}");
+            Console.WriteLine($"Payment: P{PAYMENT}");
+            Console.WriteLine($"Change: P{CHANGE}");
+
         }
     }
 }

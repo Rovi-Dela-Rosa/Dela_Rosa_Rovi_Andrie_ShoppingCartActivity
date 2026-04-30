@@ -10,7 +10,6 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
         public double Price { get; set; }
         public int RemainingStock { get; set; }
 
-        // For cart
         public int QuantityBought { get; set; }
         public Product OriginalProduct { get; set; }
 
