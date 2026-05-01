@@ -1,28 +1,11 @@
 ﻿using Dela_Rosa_Rovi_Andrie_ShoppingCartActivity;
 using System;
 
-namespace ShoppingCartActivity
+namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
 {
     class Quiz
     {
-        static void ShowMenu()
-        {
-            Console.WriteLine("\n----------------------------");
-            Console.WriteLine("--- SHOPPING CART SYSTEM ---");
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("\n>>> SYSTEM MENU <<<");
-            Console.WriteLine("\n1. Add Product to Bag");
-            Console.WriteLine("2. Search Product");
-            Console.WriteLine("3. Filter by Category");
-            Console.WriteLine("4. View Bag");
-            Console.WriteLine("5. Remove Item");
-            Console.WriteLine("6. Update Quantity");
-            Console.WriteLine("7. Clear Bag");
-            Console.WriteLine("8. Checkout");
-            Console.WriteLine("9. View Order History");
-            Console.WriteLine("10.  Exit");
-        }
-
+        static int receiptCounter = 1;
         static void AddProductMenu(Product[] bmenu, Cart bag)
         {
             Console.WriteLine("\n>>> STORE MENU <<<");
@@ -48,12 +31,21 @@ namespace ShoppingCartActivity
 
             if (!picked.HasEnoughStock(qty))
             {
-                Console.WriteLine("Not enough stock for you purchase.");
+                Console.WriteLine("Not enough stock for your purchase.");
                 return;
             }
 
             if (!bag.AddToCart(picked, qty))
+            {
                 Console.WriteLine("The cart is full.");
+            }
+            else
+            {
+                if (AskYorN("Add another item? (Y/N): "))
+                {
+                    AddProductMenu(bmenu, bag);
+                }
+            }
         }
 
         static void SearchProductMenu(Product[] bmenu)
@@ -88,7 +80,7 @@ namespace ShoppingCartActivity
             Console.WriteLine("1. Topwear" +
                 "\n2. Bottomwear" +
                 "\n3. Footwear" +
-                "\n4. Accesories");
+                "\n4. Accessories");
 
             Console.Write("Choose a category: ");
 
@@ -144,7 +136,7 @@ namespace ShoppingCartActivity
 
         static void ShowLowStock(Product[] bmenu)
         {
-            Console.WriteLine("\n--- LOW STOCK ALERT ---");
+            Console.WriteLine("\n>>> LOW STOCK ALERT <<<");
             bool found = false;
 
             foreach (var p in bmenu)
@@ -181,20 +173,42 @@ namespace ShoppingCartActivity
 
                 if (!double.TryParse(Console.ReadLine(), out payment))
                 {
-                    Console.WriteLine("Payment must be numeric.");
+                    Console.WriteLine("Payment Error! (Payment must be numeric) ");
                     continue;
                 }
 
                 if (payment < finalTotal)
                 {
-                    Console.WriteLine("Insufficient payment.");
+                    Console.WriteLine("Insufficient payment. (Enter a right amount) ");
                     continue;
                 }
 
                 break;
             }
 
-            double change = 
+            double change = payment - finalTotal;
+
+            string receiptNo = receiptCounter.ToString("D4");
+            receiptCounter++;
+
+            string dateNow = DateTime.Now.ToString("yyyy-MM-dd - hh:mm tt");
+
+            bag.DisplayReceipt(receiptNo, dateNow, payment, change);
+
+            Order.AddOrder(new Order
+            {
+                ReceiptNumber = receiptNo,
+                CheckoutDate = dateNow,
+                FinalTotal = finalTotal,
+                Payment = payment,
+                Change = change
+            });
+
+            bag.LowkeyClearBag();
+
+            ShowLowStock(bmenu);
+
+            Console.WriteLine("\nChecking out is successful. Thank you for copping goods!");
 
         }
 
@@ -213,63 +227,89 @@ namespace ShoppingCartActivity
 
             while (true)
             {
-                ShowMenu();
+                Order.ShowMenu();
 
                 Console.Write("\nChoose an option: ");
                 if (!int.TryParse(Console.ReadLine(), out int choice))
                 {
                     Console.WriteLine("Invalid input! Try again.");
+                    continue;
                 }
 
                 switch (choice)
                 {
-                    case 1: 
-                        AddProductMenu(bmenu, bag); 
+                    case 1:
+                        AddProductMenu(bmenu, bag);
                         break;
-                    case 2: 
-                        SearchProductMenu(bmenu); 
+                    case 2:
+                        SearchProductMenu(bmenu);
                         break;
-                    case 3: 
-                        CategoryMenu(bmenu); 
+                    case 3:
+                        CategoryMenu(bmenu);
                         break;
-                    case 4: 
-                        bag.ViewCart(); 
+                    case 4:
+                        bag.ViewCart();
                         break;
 
                     case 5:
-                        Console.Write("Enter ID to remove: ");
-                        if (int.TryParse(Console.ReadLine(), out int rid))
-                            Console.WriteLine(bag.RemoveItem(rid) ? "Removed." : "Not found.");
-                        else
+                        while (true)
                         {
-                            Console.WriteLine("Invalid input! Try again.");
+                            Console.Write("Enter ID to remove: ");
+
+                            if (int.TryParse(Console.ReadLine(), out int rid))
+                            {
+                                Console.WriteLine("Invalid input! Please enter a numeric ID.");
+                                continue;
+                            }
+
+                            if (!bag.RemoveItem(rid))
+                            {
+                                Console.WriteLine("Invalid input! Try again.");
+                                continue;
+
+                            }
+                            Console.WriteLine("The item was succesfully removed.");
+                            break;
                         }
                         break;
-
                     case 6:
-                        Console.Write("Enter ID: ");
                         int uid;
                         int qty;
 
-                        if (!int.TryParse(Console.ReadLine(), out uid))
+                        while (true)
                         {
-                            Console.WriteLine("Invalid input! Try again.");
+                            Console.Write("Enter ID: ");
+                            if (!int.TryParse(Console.ReadLine(), out uid))
+                            {
+                                Console.WriteLine("Invalid input! Try again.");
+                                continue;
+                            }
+
+                            Console.Write("New Quantity: ");
+                            if (!int.TryParse(Console.ReadLine(), out qty) || qty <= 0)
+                            {
+                                Console.WriteLine("Quantity must be a positive number!");
+                                continue;
+                            }
+
+                            bool updated = bag.UpdateQuantity(uid, qty);
+
+                            if (!updated)
+                            {
+                                Console.WriteLine("Update failed. Either item not found or insufficient stock.");
+                                continue;
+                            }
+
+                            Console.WriteLine("Quantity updated successfully.");
                             break;
                         }
-
-                        Console.Write("New Quantity: ");
-                        if (!int.TryParse(Console.ReadLine(), out qty))
-                        {
-                            Console.WriteLine("Invalid quantity! Try again.");
-                            break;
-                        }
-
-                        Console.WriteLine(bag.UpdateQuantity(uid, qty) ? "Updated." : "Failed.");
                         break;
 
-
-                    case 7: 
-                        bag.ClearBag(); 
+                    case 7:
+                        if (AskYorN("Are you sure you want to clear your bag? (Y/N): "))
+                        {
+                            bag.ClearBag();
+                        }
                         break;
 
                     case 8:
@@ -281,12 +321,31 @@ namespace ShoppingCartActivity
                         break;
 
                     case 10:
-                        return;
+                        if (AskYorN("Exit program? (Y/N): "))
+                            return;
+                        break;
 
                     default:
                         Console.WriteLine("Invalid MENU choice. Please try again.");
                         break;
                 }
+            }
+        }
+        public static bool AskYorN(string message)
+        {
+            while (true)
+            {
+                Console.Write(message);
+
+                string answer = Console.ReadLine().Trim().ToUpper();
+
+                if (answer == "Y")
+                    return true;
+
+                if (answer == "N")
+                    return false;
+
+                Console.WriteLine("Invalid input. Please enter Y or N only.");
             }
         }
     }
