@@ -4,6 +4,8 @@
     This project is a console-based Shopping Cart System built using C#. It applies object-oriented programming principles such as classes, objects, methods, and arrays to simulate a basic retail shopping experience.
     The system allows users to browse products, manage a shopping cart, validate stock availability, and process checkout transactions. It is progressively enhanced from a basic cart system (Part 1) into a more advanced system with full cart management, payment validation, receipt generation, and order tracking (Part 2).
 
+>> Features
+
 Part 1: Basic Shopping Cart System
 •	Implements a Product class containing product details such as Id, Name, Price, and RemainingStock. 
 •	Displays a product menu using arrays and looping structures. 
