@@ -7,8 +7,29 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
         public int Id { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
-        public double Price { get; set; }
-        public int RemainingStock { get; set; }
+
+        private double price;
+        private int remainingstock; 
+        
+        public double Price                       //since i already have an encapsulation (getters & setters) in the first place i js converted these 2 product data
+        {                                         // into private modifiers fields (much controlled) to protect stock and price by preventing invalid negative assignments.
+            get { return price; }
+            set
+            {
+                if (value >= 0)
+                    price = value;
+            }
+        }
+
+        public int RemainingStock
+        {
+            get { return remainingstock; }
+            set
+            {
+                if (value >= 0)
+                    remainingstock = value;
+            }
+        }
 
         public int QuantityBought { get; set; }
         public Product OriginalProduct { get; set; }

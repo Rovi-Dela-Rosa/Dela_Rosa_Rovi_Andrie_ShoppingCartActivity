@@ -256,7 +256,7 @@ namespace Dela_Rosa_Rovi_Andrie_ShoppingCartActivity
                         {
                             Console.Write("Enter ID to remove: ");
 
-                            if (int.TryParse(Console.ReadLine(), out int rid))
+                            if (!int.TryParse(Console.ReadLine(), out int rid))
                             {
                                 Console.WriteLine("Invalid input! Please enter a numeric ID.");
                                 continue;
